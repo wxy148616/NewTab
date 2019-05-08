@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href=""/>
+    <style>
+        html, body {
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            overflow-y: hidden;
+            margin: auto;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        .s_div {
+            text-align: center;
+            width: 30%;
+            height: 30px;
+            font-size: 1em;
+            line-height: 1em;
+            margin: 5em auto 0;
+            border-width: 1px;
+            background: rgba(255, 255, 255, 0.35);
+            border-style: groove;
+            outline: 0;
+            -webkit-appearance: none;;
+        }
+
+        .s_input {
+            width: 100%;
+            height: 100%;
+            font-size: 1em;
+            margin-bottom: 6px;
+            background: transparent;
+            border-style: none;
+            outline: 0;
+        }
+
+        .word_list {
+            text-align: center;
+            width: 10em;
+            margin: 4em auto;
+            background: rgba(12, 9, 9, 0.50);
+            outline: 0;
+            -webkit-appearance: none;;
+        }
+
+        #word {
+            font-size: 30px;
+            color: #FFC107;
+        }
+
+        #phonetic_symbol_e {
+            font-size: 15px;
+            color: #989470;
+            white-space: nowrap;
+        }
+
+        #phonetic_symbol_u {
+            font-size: 15px;
+            color: #989470;
+            white-space: nowrap;
+        }
+
+        #chinese {
+            font-size: 20px;
+            color: white;
+            white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+<div class="s_div">
+    <input class="s_input" type="text" id="inputId" onkeydown="enter_search()"/>
+    <span><a class="s_a" href="" id="linkUrlId" onclick="search()">搜索</a></span>
+</div>
+<div class="word_list">
+    <a href="" id="search_word" onclick="search_word()"><div id="word"></div></a>
+    <div id="phonetic_symbol_e"></div>
+    <div id="phonetic_symbol_u"></div>
+    <div id="chinese"></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    let arr = ["./images/1.jpg", "./images/2.jpg", "./images/3.png"];
+    arr[3] = "./images/10.jpg";
+    let randomBgIndex = arr[Math.floor((Math.random() * arr.length))];
+    document.write('<style>body{background-image:url(' + randomBgIndex + ')}</style>');
+
+    $.ajax({
+        type: "get",
+        url: "http://127.0.0.1:5000/",
+        async: true,
+        dataType: "json",
+        success: function (data) {
+            $("#word").text(data.word);
+            $("#chinese").text(data.chinese);
+            $("#phonetic_symbol_e").text(data.phonetic_symbol_e);
+            $("#phonetic_symbol_u").text(data.phonetic_symbol_u);
+        }
+    });
+
+    // https://cn.bing.com/dict/search?q=wrist&mkt=zh-cn
+    function search_word() {
+        let word = $("#word").text();
+        console.log(word);
+        document.getElementById('search_word').href = "https://cn.bing.com/dict/search?q=" + word + "&mkt=zh-cn";
+        document.getElementById('search_word').click();
+    }
+    function enter_search() {
+        let event = window.event;
+        // console.log(event.keyCode);
+        // alert(event.KeyCode);
+        if (event.keyCode === 13) {
+            console.log(event.keyCode);
+            search();
+        }
+    }
+
+    function search() {
+        let msg = document.getElementById('inputId').value;
+        if (msg) {
+            document.getElementById('linkUrlId').href = "https://www.baidu.com/s?wd=" + msg;
+            document.getElementById('linkUrlId').click();
+        }
+
+    }
+
+    (function () {
+        document.getElementById('inputId').focus()
+    })();
+
+</script>
+
+</body>
+
+</html>
